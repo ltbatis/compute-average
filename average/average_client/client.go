@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/ltbatista/compute-average/average/averagepb"
@@ -27,28 +29,14 @@ func main() {
 
 func doClientStreaming(c averagepb.AverageServiceClient) {
 	fmt.Println("Sarting to do a Client Streaming RPC...")
-	//TODO: implementar leitura de argumentos do terminal e percorrer por eles
-	requests := []*averagepb.AverageRequest{
-		&averagepb.AverageRequest{
+	requests := make([]*averagepb.AverageRequest, len(os.Args)-1)
+	for i := 1; i < len(os.Args); i++ {
+		numero, _ := strconv.Atoi(os.Args[i])
+		requests[i-1] = &averagepb.AverageRequest{
 			Average: &averagepb.Average{
-				Number: 1,
+				Number: int32(numero),
 			},
-		},
-		&averagepb.AverageRequest{
-			Average: &averagepb.Average{
-				Number: 2,
-			},
-		},
-		&averagepb.AverageRequest{
-			Average: &averagepb.Average{
-				Number: 3,
-			},
-		},
-		&averagepb.AverageRequest{
-			Average: &averagepb.Average{
-				Number: 4,
-			},
-		},
+		}
 	}
 
 	stream, err := c.Average(context.Background())
