@@ -20,7 +20,7 @@ func (*server) Average(stream averagepb.AverageService_AverageServer) error {
 		req, err := stream.Recv()
 		if err == io.EOF {
 			// we have finished reading the client stream
-			result := fmt.Sprintf("The average is: %f", float64(dividendo)/float64(divisor))
+			result := fmt.Sprintf("The average is: %.2f", float64(dividendo)/float64(divisor))
 			return stream.SendAndClose(&averagepb.AverageResponse{
 				Result: result,
 			})
